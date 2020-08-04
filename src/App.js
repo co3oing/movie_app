@@ -1,31 +1,49 @@
 import React from 'react';
 import axios from 'axios';
+import Movie from './Movie';
 
 class App extends React.Component {
     state = {
         isLoading: true,
         movies: [],
-    };
+        };
 
     getMovies = /* getMovies()는 시간이 필요함 */ async () => {
         const {
             data: { // data->
-                data: { movies }, // data->movies
+                    data: { movies }, // data->movies
             },
-        } = /* axios.get()의 실행을 기다림 (async 안에서만 작동) */ await axios.get('https://yts-proxy.now.sh/list_movies.json');
-        this.setState({ movies });
-        // = this.setState({ /* state */ movies: /* data */ movies }); 의 축약 형태의 코드
+        } = /* axios.get()의 실행을 기다림 (async 안에서만 작동) */ await axios.get('https://yts-proxy.now.sh/list_movies.json?sort_by=rating');
+        this.setState({ movies, isLoading: false }); // { /* state */ movies: /* data */ movies } 는 { movies } 로 축약가능
     }
 
-    componentDidMount() {
-        // 영화 데이터 로딩
-        this.getMovies();
-    }
+        componentDidMount() {
+            // 영화 데이터 로딩
+            this.getMovies();
+        }
 
-    render(){
-        const { isLoading } = this.state;
-        return <div>{isLoading ? 'Loading...' : 'We are ready'} </div>;
-    }
+        render(){
+            const { isLoading, movies } = this.state;
+            return (
+                <div>
+                    {isLoading 
+                        ? 'Loading...' 
+                        : movies.map((movie) => {
+                            return (
+                                /* Movie 컴포넌트 */ 
+                                <Movie 
+                                    key = { movie.id }
+                                    id = { movie.id }
+                                    year = { movie.year }
+                                    title = { movie.title }
+                                    summary = { movie.summary }
+                                    poster = { movie.medium_cover_image }
+                                />
+                            );  
+                       })} 
+               </div>
+            );
+               }
 }
 
 export default App;
