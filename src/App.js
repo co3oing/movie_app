@@ -1,54 +1,9 @@
 import React from 'react';
-import axios from 'axios';
-import Movie from './Movie';
+import Home from './routes/Home';
 import './App.css';
 
-class App extends React.Component {
-    state = {
-        isLoading: true,
-        movies: [],
-        };
-
-    getMovies = /* getMovies()는 시간이 필요함 */ async () => {
-        const {
-            data: { // data->
-                    data: { movies }, // data->movies
-            },
-        } = /* axios.get()의 실행을 기다림 (async 안에서만 작동) */ await axios.get('https://yts-proxy.now.sh/list_movies.json?sort_by=rating');
-        this.setState({ movies, isLoading: false }); // { /* state */ movies: /* data */ movies } 는 { movies } 로 축약가능
-    }
-
-        componentDidMount() {
-            // 영화 데이터 로딩
-            this.getMovies();
-        }
-
-        render() {
-            const { isLoading, movies } = this.state;
-            return (
-                <section className="container">
-                    {isLoading ? ( 
-                        <div className="loader">
-                            <span className="loader__text">Loading...</span>
-                        </div>
-                    ) : (
-                        <div className="movies">
-                            {movies.map(movie => (
-                                <Movie 
-                                    key = { movie.id }
-                                    id = { movie.id }
-                                    year = { movie.year }
-                                    title = { movie.title }
-                                    summary = { movie.summary }
-                                    poster = { movie.medium_cover_image }
-                                    genres={ movie.genres }
-                                /> 
-                               ))} 
-                                </div>
-                                      )}
-                                </section>
-                             );
-                                }
-                            }
+function App() {
+    return <Home />;
+}
 
 export default App;
